@@ -9,7 +9,7 @@ class Menu extends Model implements AdminMenuInterface
 {
     use AdminMenuTrait;
 
-    protected $table = 'admin_menus';
+    protected $table = 'business_menus';
 
     protected $primaryKey = 'id';
 

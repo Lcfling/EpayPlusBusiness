@@ -37,4 +37,16 @@ Route::group(['namespace' => "Business",'middleware' => ['auth']], function () {
     Route::get('/',                     'HomeController@index');
     Route::get('/index',                'HomeController@welcome');
     Route::resource('/menus',           'MenuController');
+    Route::resource('/users',           'UserController');
+    Route::get('/buswithdraw/userinfo', 'BuswithdrawController@userInfo');
+    Route::resource('/buswithdraw',     'BuswithdrawController');
+    Route::resource('/bank',            'BankController');
+    Route::post('/buswithdraw/valPwd',  'BuswithdrawController@valPwd');
+    Route::post('/buswithdraw/resPwd',  'BuswithdrawController@resPwd');
+    Route::post('/buswithdraw/valPaypwd',  'BuswithdrawController@valPaypwd');
+    Route::post('/buswithdraw/resPaypwd',  'BuswithdrawController@resPaypwd');
+    Route::post('/buswithdraw/resInfo','BuswithdrawController@resInfo');
+    Route::resource('/order','OrderController');
+    Route::resource('/info','InfoController');
+    Route::resource('/billflow','BillflowController');
 });

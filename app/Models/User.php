@@ -11,8 +11,10 @@ use App\Models\Traits\AdminUsersTrait;
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract, AdminUsersInterface
 {
     use Authenticatable, CanResetPassword, AdminUsersTrait;
-    protected $table = 'admin_users';
-    protected $fillable = ['username', 'email', 'mobile', 'password'];
-    protected $hidden = ['password', 'remember_token'];
+    protected $table = 'business';
+    protected $fillable = ['nickname', 'account', 'password','accessKey','shenfen','mobile','fee','status'];
+    protected $hidden = ['password', 'remember_token','paypassword'];
     protected $userInfo;
+    protected $primaryKey = 'business_code';
+    public $timestamps = false;
 }

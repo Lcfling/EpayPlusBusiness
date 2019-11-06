@@ -22,13 +22,13 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username" disabled autocomplete="off" class="layui-input layui-disabled" value="{{$userinfo['username']}}">
+                        <input type="text" name="username" disabled autocomplete="off" class="layui-input layui-disabled" value="{{$userinfo['account']}}">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">邮箱：</label>
+                    <label class="layui-form-label">密钥：</label>
                     <div class="layui-input-block">
-                        <input type="text" name="useremail" required  lay-verify="required|email" placeholder="请输入标题" autocomplete="off" class="layui-input" value="{{$userinfo['email']}}">
+                        <input type="text" name="useremail" required  lay-verify="required|email" placeholder="请输入标题" autocomplete="off" class="layui-input" value="{{$userinfo['accessKey']}}">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -37,21 +37,7 @@
                         <input type="text" name="usertel" required  lay-verify="required|phone" placeholder="请输入标题" autocomplete="off" class="layui-input" value="{{$userinfo['mobile']}}">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">性别：</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="usersex" value="1" title="男"
-                               @if(!isset($userinfo['sex']))
-                               checked
-                               @elseif(isset($userinfo['sex'])&&$userinfo['sex'])
-                               checked
-                                @else
-                                @endif>
-                        <input type="radio" name="usersex" value="0" title="女" {{isset($userinfo['sex'])&&!$userinfo['sex']?'checked':''}}>
-                    </div>
-
-                </div>
-                <input name="id" type="hidden" value="{{$userinfo['id'] or 0}}">
+                <input name="id" type="hidden" value="{{$userinfo['business_code'] or 0}}">
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn layui-btn-normal" lay-submit lay-filter="adminInfo">立即提交</button>

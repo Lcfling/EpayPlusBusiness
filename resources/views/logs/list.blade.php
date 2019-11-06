@@ -4,7 +4,7 @@
         <div class="layui-btn layui-btn-small layui-btn-warm hidden-xs fresh" fresh-url="{{url('/logs')}}"><i class="layui-icon">&#x1002;</i></div>
     </div>
     <div class="layui-inline">
-        <input type="text" lay-verify="title" value="{{ $input['title'] or '' }}" name="title" placeholder="请输入关键字" autocomplete="off" class="layui-input">
+        <input type="text" lay-verify="title" value="{{ $input['title'] or '' }}" name="title" placeholder="请输入订单号" autocomplete="off" class="layui-input">
     </div>
     <div class="layui-inline">
         <select name="status" lay-filter="status" lay-verify="status">

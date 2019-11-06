@@ -15,9 +15,10 @@ use App\Models\User;
 use App\Service\DataService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class UserController extends BaseController
+class UserController extends Controller
 {
     /**
      * 用户列表
@@ -60,8 +61,9 @@ class UserController extends BaseController
      *用户基本信息编辑页面
      */
     public function userInfo(){
-        $user = new Admin();
-        return view('users.userinfo',['userinfo'=>$user->user()]);
+        $id = Auth::id();
+        $info = $id?User::find($id):[];
+        return view('users.userinfo',['userinfo'=>$info]);
     }
     /**
      *用户基本信息修改
