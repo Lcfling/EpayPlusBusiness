@@ -4,12 +4,11 @@
 namespace App\Http\Controllers\Business;
 
 
-use App\Http\Controllers\Controller;
 use App\Models\Billflow;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class BillflowController extends Controller
+class BillflowController extends BaseController
 {
     /**
      * 数据列表

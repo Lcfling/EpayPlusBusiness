@@ -4,13 +4,12 @@
 namespace App\Http\Controllers\Business;
 
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRequest;
 use App\Models\Bank;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class BankController extends Controller
+class BankController extends BaseController
 {
     /**
      * 数据列表

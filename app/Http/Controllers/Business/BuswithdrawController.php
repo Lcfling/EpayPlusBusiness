@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class BuswithdrawController extends Controller
+class BuswithdrawController extends BaseController
 {
     public function index(Request $request){
         $id = Auth::id();

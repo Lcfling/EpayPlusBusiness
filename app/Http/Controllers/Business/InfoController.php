@@ -4,11 +4,10 @@
 namespace App\Http\Controllers\Business;
 
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class InfoController extends Controller
+class InfoController extends BaseController
 {
     public function index(){
         $id = Auth::id();
