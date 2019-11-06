@@ -62,7 +62,7 @@ class BuswithdrawController extends Controller
         //效验支付密码
         if($balance>$busCount['balance']){
             return ['msg'=>'您输入的金额大于余额！请重新输入','status'=>0];
-        }else if(md5(md5($pwd))!=$userInfo['paypassword']){
+        }else if(md5(md5(HttpFilter($pwd)))!=$userInfo['paypassword']){
             return ['msg'=>'提现密码不正确！','statuc'=>0];
         }else{
             $bool= $this->lock($business);
@@ -107,7 +107,7 @@ class BuswithdrawController extends Controller
         $pwd = $request->input('oldpwd');
         $id = Auth::id();
         $userInfo = $id?User::find($id):[];
-        if(!App::make('hash')->check($pwd,$userInfo['password'])){
+        if(!App::make('hash')->check(HttpFilter($pwd),$userInfo['password'])){
             return ['msg'=>'旧密码不正确！','status'=>1];
         }
     }
@@ -121,10 +121,10 @@ class BuswithdrawController extends Controller
         $pwd = $request->input('pwd');
         $id = Auth::id();
         $userInfo = $id?User::find($id):[];
-        if(!App::make('hash')->check($oldpwd,$userInfo['password'])){
+        if(!App::make('hash')->check(HttpFilter($oldpwd),$userInfo['password'])){
             return ['msg'=>'旧密码不正确','status'=>0];
         }else{
-            $count = DB::table('business')->where('business_code',$id)->update(['password'=>bcrypt($pwd),'updatetime'=>time()]);
+            $count = DB::table('business')->where('business_code',$id)->update(['password'=>bcrypt(HttpFilter($pwd)),'updatetime'=>time()]);
             if ($count){
                 return ['msg'=>'修改成功！','status'=>1];
             }else{
@@ -140,7 +140,7 @@ class BuswithdrawController extends Controller
         $oldpaypwd = $request->input('oldpaypwd');
         $id = Auth::id();
         $userInfo = $id?User::find($id):[];
-        if(md5(md5($oldpaypwd))!=$userInfo['paypassword']){
+        if(md5(md5(HttpFilter($oldpaypwd)))!=$userInfo['paypassword']){
             return ['msg'=>'旧密码错误！','status'=>1];
         }
     }
@@ -154,10 +154,10 @@ class BuswithdrawController extends Controller
         $paypwd = $request->input('paypwd');
         $id = Auth::id();
         $userInfo = $id?User::find($id):[];
-        if(md5(md5($oldpaypwd))!=$userInfo['paypassword']){
+        if(md5(md5(HttpFilter($oldpaypwd)))!=$userInfo['paypassword']){
             return ['msg'=>'旧密码错误！'];
         }else{
-            $count = DB::table('business')->where('business_code',$id)->update(['paypassword'=>md5(md5($paypwd)),'updatetime'=>time()]);
+            $count = DB::table('business')->where('business_code',$id)->update(['paypassword'=>md5(md5(HttpFilter($paypwd))),'updatetime'=>time()]);
             if($count){
                 return ['msg'=>'修改成功！','status'=>1];
             }else{
@@ -173,7 +173,7 @@ class BuswithdrawController extends Controller
         $nickname = $request->input('nickname');
         //获取当前用户
         $id = Auth::id();
-        $count = User::where('business_code',$id)->update(['nickname'=>$nickname]);
+        $count = User::where('business_code',$id)->update(['nickname'=>HttpFilter($nickname)]);
         if($count){
             return ['msg'=>'修改成功！','status'=>1];
         }else{

@@ -31,3 +31,6 @@ function computeWeek($date,$status = 'true'){
     $res = ceil($diff/(24*60*60*7));
     return $res;
 }
+function HttpFilter($str){
+    return $str;
+}

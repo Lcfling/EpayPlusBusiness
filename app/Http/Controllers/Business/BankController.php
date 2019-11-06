@@ -43,6 +43,9 @@ class BankController extends Controller
         $id = Auth::id();
         unset($data['_token']);
         $data['business_code']=$id;
+        $data['name']=HttpFilter($data['name']);
+        $data['deposit_name']=HttpFilter($data['deposit_name']);
+        $data['deposit_card']=HttpFilter($data['deposit_card']);
         $data['status']=0;
         $data['creatime']=time();
         $count = Bank::insert($data);
