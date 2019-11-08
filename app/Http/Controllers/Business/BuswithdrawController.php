@@ -48,6 +48,7 @@ class BuswithdrawController extends BaseController
      * 添加提现申请
      */
     public function store(StoreRequest $request){
+        $order_sn = time().mt_rand(100000,999999);
         //获取银行卡的id
         $id = $request->input('bank_card');
         //获取输入的支付密码
@@ -73,7 +74,7 @@ class BuswithdrawController extends BaseController
                 DB::beginTransaction();
                 try{
                     BusCount::where('business_id',$business)->decrement('balance',$balance);
-                    $count = DB::table('business_withdraw')->insert(['business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'creatime'=>time()]);
+                    $count = DB::table('business_withdraw')->insert(['order_sn'=>$order_sn,'business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'creatime'=>time()]);
                     if($count){
                         DB::commit();
                         $this->unlock($business);
