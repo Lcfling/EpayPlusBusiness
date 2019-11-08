@@ -17,4 +17,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $userInfo;
     protected $primaryKey = 'business_code';
     public $timestamps = false;
+
+    public function getUserInfo($account){
+        $user =User::where('account',$account)->first();
+        return $user;
+    }
 }

@@ -24,6 +24,7 @@ class BuswithdrawController extends BaseController
         $map['business_code']=$id;
         $data = Buswithdraw::where($map)->paginate(5)->appends($request->all());
         foreach ($data as $key =>$value){
+            $data[$key]['money'] = $data[$key]['money']/100;
             $data[$key]['creatime'] =date("Y-m-d H:i:s",$value["creatime"]);
             if($data[$key]['endtime']!=''){
                 $data[$key]['endtime'] =date("Y-m-d H:i:s",$value["endtime"]);
@@ -40,6 +41,7 @@ class BuswithdrawController extends BaseController
         $business = Auth::id();
         $data = Bank::get()->where('business_code',$business)->where('status',0);
         $busCount = BusCount::where('business_id',$business)->first();
+        $busCount['balance']=$busCount['balance']/100;
         return view('buswithdraw.edit',['info'=>$info,'id'=>$id,'banklist'=>$data,'balance'=>$busCount]);
     }
     /**
@@ -51,7 +53,7 @@ class BuswithdrawController extends BaseController
         //获取输入的支付密码
         $pwd = $request->input('paypassword');
         //获取用户输入的金额
-        $balance = $request->input('money');
+        $balance = $request->input('money')*100;
         //获取银行卡的信息
         $bankInfo = $id?Bank::find($id):[];
         //获取当前用户信息

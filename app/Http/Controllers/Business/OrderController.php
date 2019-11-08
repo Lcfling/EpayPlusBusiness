@@ -13,7 +13,15 @@ class OrderController extends Controller
 {
     public function index(Request $request){
         $business = Auth::id();
-        $weeksuf = computeWeek(time(),false);
+        if(true==$request->has('creatime')){
+            $time = strtotime($request->input('creatime'));
+            $weeksuf = computeWeek($time,false);
+            /*print_r($time);
+            print_r($weeksuf);
+            die();*/
+        }else{
+            $weeksuf = computeWeek(time(),false);
+        }
         $order = new Order();
         $order->setTable('order_'.$weeksuf);
         $sql = $order->where('business_code','=',$business);

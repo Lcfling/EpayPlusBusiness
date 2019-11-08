@@ -44,6 +44,10 @@ class LoginController extends Controller
     }
     public function login(Request $request)
     {
+        /*$user = new User();
+        if(!$this->verifyGooglex('',$request->input('account'),$user)){
+            return redirect('/agent/login')->withErrors([trans('fzs.login.false_verify')]);
+        }*/
         if($request->input('verity')==session('code'))return $this->doLogin($request);
         else return redirect('/business/login')->withErrors([trans('fzs.login.false_verify')]);
     }
