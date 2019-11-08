@@ -22,6 +22,9 @@ class BuswithdrawController extends BaseController
         $id = Auth::id();
         $map = array();
         $map['business_code']=$id;
+        if(true==$request->has('status')){
+            $map['status']=$request->input('status');
+        }
         $data = Buswithdraw::where($map)->paginate(5)->appends($request->all());
         foreach ($data as $key =>$value){
             $data[$key]['money'] = $data[$key]['money']/100;
