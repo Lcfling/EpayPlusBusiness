@@ -7,10 +7,11 @@
  * @version     1.0 版本号
  */
 namespace App\Http\Controllers\Auth;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Business\BaseController;
+use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-class LoginController extends Controller
+class LoginController extends BaseController
 {
     /*
     |--------------------------------------------------------------------------
@@ -43,10 +44,10 @@ class LoginController extends Controller
     }
     public function login(Request $request)
     {
-        /*$user = new User();
-        if(!$this->verifyGooglex('',$request->input('account'),$user)){
+        $user = new User();
+        if(!$this->verifyGooglex($request->input('ggkey'),$request->input('account'),$user)){
             return redirect('/agent/login')->withErrors([trans('fzs.login.false_verify')]);
-        }*/
+        }
         if($request->input('verity')==session('code'))return $this->doLogin($request);
         else return redirect('/business/login')->withErrors([trans('fzs.login.false_verify')]);
     }
