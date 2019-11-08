@@ -3,6 +3,13 @@
     <div class="layui-inline">
     <button class="layui-btn layui-btn-small layui-btn-warm freshBtn"><i class="layui-icon">&#x1002;</i></button>
     </div>
+    <div class="layui-inline">
+        <input class="layui-input" name="creattime" placeholder="创建时间" lay-verify="creattime"  onclick="layui.laydate({elem: this, festival: true})" value="{{ $input['creattime'] or '' }}">
+    </div>
+    <div class="layui-inline">
+        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">搜索</button>
+        <button class="layui-btn layui-btn-normal" id="res">重置</button>
+    </div>
 @endsection
 @section('table')
     <table class="layui-table" lay-even lay-skin="nob">
@@ -59,6 +66,10 @@
             laydate({istoday: true});
             form.render();
             form.on('submit(formDemo)', function(data) {
+            });
+            $('#res').click(function () {
+                $("input[name='creattime']").val('');
+                $('form').submit();
             });
         });
     </script>

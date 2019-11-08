@@ -15,9 +15,21 @@ class BillflowController extends BaseController
      */
     public function index(Request $request){
         $id = Auth::id();
-        $map = array();
-        $map['business_code']=$id;
-        $data = Billflow::where($map)->paginate('2')->appends($request->all());
+        if(true==$request->has('creattime')){
+            $time = strtotime($request->input('creattime'));
+            $weeksuf = computeWeek($time,false);
+        }else{
+            $weeksuf = computeWeek(time(),false);
+        }
+        $bill = new Billflow();
+        $bill->setTable('business_billflow_'.$weeksuf);
+        $sql = $bill->where('business_code','=',$id);
+        if(true==$request->has('creattime')){
+            $start=strtotime($request->input('creattime'));
+            $end = strtotime('+1day',$start);
+            $sql->whereBetween('creattime',[$start,$end]);
+        }
+        $data =$sql->paginate(10)->appends($request->all());
         foreach ($data as $key =>$value){
             $data[$key]['creattime'] =date("Y-m-d H:i:s",$value["creattime"]);
         }

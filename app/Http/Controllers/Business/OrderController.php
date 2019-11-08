@@ -16,9 +16,6 @@ class OrderController extends Controller
         if(true==$request->has('creatime')){
             $time = strtotime($request->input('creatime'));
             $weeksuf = computeWeek($time,false);
-            /*print_r($time);
-            print_r($weeksuf);
-            die();*/
         }else{
             $weeksuf = computeWeek(time(),false);
         }

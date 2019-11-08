@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Billflow extends Model
 {
-    protected $table = 'business_billflow';
+    protected $table;
 }
