@@ -76,16 +76,29 @@ class BuswithdrawController extends BaseController
                 //开启事物
                 DB::beginTransaction();
                 try{
-                    BusCount::where('business_id',$business)->decrement('balance',$balance);
-                    $count = DB::table('business_withdraw')->insert(['order_sn'=>$order_sn,'business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'creatime'=>time()]);
-                    if($count){
-                        DB::commit();
+                    $busCon = BusCount::onWriteConnection()->where('business_id',$business)->first()->lockForUpdate();
+                    if($busCon['balance']<$request->input('money')){
                         $this->unlock($business);
-                        return ['msg'=>'申请成功！请您耐心稍等','status'=>1];
-                    }else{
                         DB::rollBack();
-                        $this->unlock($business);
-                        return ['msg'=>'申请失败！请重新填写信息','status'=>0];
+                        return ['msg'=>'您输入的金额大于余额！请重新输入','status'=>0];
+                    }else{
+                        $num = BusCount::where('business_id',$business)->decrement('balance',$balance);
+                        if($num){
+                            $count = DB::table('business_withdraw')->insert(['order_sn'=>$order_sn,'business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'creatime'=>time()]);
+                            if($count){
+                                DB::commit();
+                                $this->unlock($business);
+                                return ['msg'=>'申请成功！请您耐心稍等','status'=>1];
+                            }else{
+                                DB::rollBack();
+                                $this->unlock($business);
+                                return ['msg'=>'申请失败！请重新填写信息','status'=>0];
+                            }
+                        }else{
+                            $this->unlock($business);
+                            DB::rollBack();
+                            return ['发现错误，请联系管理员！','status'=>0];
+                        }
                     }
                 }catch (Exception $e) {
                     DB::rollBack();
