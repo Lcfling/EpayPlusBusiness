@@ -9,6 +9,7 @@
     <div class="layui-inline">
         <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">搜索</button>
         <button class="layui-btn layui-btn-normal" id="res">重置</button>
+        <button class="layui-btn layui-btn-normal" name="export" value="export" lay-submit lay-filter="formDemo">导出</button>
     </div>
 @endsection
 @section('table')
@@ -36,23 +37,28 @@
         </tr>
         </thead>
         <tbody>
+        @foreach($list as $info)
             <tr>
-                <td class="hidden-xs">{{$list['order_id']}}</td>
-                <td class="hidden-xs">{{$list['order_sn']}}</td>
-                <td>{{$list['score']}}</td>
-                <td class="hidden-xs">{{$list['business_code']}}</td>
+                <td class="hidden-xs">{{$info['order_id']}}</td>
+                <td class="hidden-xs">{{$info['order_sn']}}</td>
+                <td>{{$info['score']}}</td>
+                <td class="hidden-xs">{{$info['business_code']}}</td>
                 <td class="hidden-xs">
-                    @if($list['status']==1)
+                    @if($info['status']==1)
                         支付
-                    @elseif($list['status']==2)
+                    @elseif($info['status']==2)
                         利润
                     @endif
                 </td>
-                <td class="hidden-xs">{{$list['paycode']}}</td>
-                <td class="hidden-xs">{{$list['remark']}}</td>
-                <td class="hidden-xs">{{$list['creattime']}}</td>
+                <td class="hidden-xs">{{$info['paycode']}}</td>
+                <td class="hidden-xs">{{$info['remark']}}</td>
+                <td class="hidden-xs">{{$info['creattime']}}</td>
             </tr>
+        @endforeach
         </tbody>
+        <div class="page-wrap">
+            {{$list->render()}}
+        </div>
     </table>
 @endsection
 @section('js')

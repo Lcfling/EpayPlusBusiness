@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Business;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRequest;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Excel;
 
 class OrderController extends Controller
 {
@@ -38,11 +40,39 @@ class OrderController extends Controller
             $end=strtotime($request->input('pay_time'));
             $sql->whereBetween('creatime',[$start,$end]);
         }
-        $data=$sql->paginate(5)->appends($request->all());
-        foreach ($data as $key=>$value){
-            $data[$key]['creatime']=date("Y-m-d H:i:s",$value["creatime"]);
-            $data[$key]['pay_time']=date("Y-m-d H:i:s",$value["pay_time"]);
+        if(true==$request->input('export')&& true==$request->has('export')){
+            $head = array('外部订单号','平台订单号','支付类型','真实付款金额','收款金额','支付状态','创建时间','支付时间','商户号');
+            $data = $sql->select('out_order_sn','order_sn','payType','tradeMoney','sk_money','status','creatime','pay_time','business_code')->get()->toArray();
+            foreach ($data as $key=>$value){
+                $data[$key]['creatime']=date("Y-m-d H:i:s",$value["creatime"]);
+                $data[$key]['pay_time']=date("Y-m-d H:i:s",$value["pay_time"]);
+            }
+            exportExcel($head,$data,'订单信息','',true);
+        }else{
+            $data=$sql->paginate(5)->appends($request->all());
+            foreach ($data as $key=>$value){
+                $data[$key]['creatime']=date("Y-m-d H:i:s",$value["creatime"]);
+                if($data[$key]['pay_time']!=0){
+                    $data[$key]['pay_time']=date("Y-m-d H:i:s",$value["pay_time"]);
+                }else{
+                    $data[$key]['pay_time']="无";
+                }
+
+            }
+            return view('order.list',['list'=>$data,'input'=>$request->all()]);
         }
-        return view('order.list',['list'=>$data,'input'=>$request->all()]);
+    }
+
+    public function export(StoreRequest $request){
+        $weeksuf = computeWeek(time(),false);
+        $order = new Order();
+        $order->setTable('order_'.$weeksuf);
+        $cellData = $order->select('out_order_sn','order_sn','payType','tradeMoney','sk_money','status','creatime','pay_time','business_code')->get()->toArray();
+        foreach ($cellData as $key=>$value){
+            $cellData[$key]['creatime']=date("Y-m-d H:i:s",$value["creatime"]);
+            $cellData[$key]['pay_time']=date("Y-m-d H:i:s",$value["pay_time"]);
+        }
+        $head = array('外部订单号','平台订单号','支付类型','真实付款金额','收款金额','支付状态','创建时间','支付时间','商户号');
+        exportExcel($head,$cellData,'订单信息','',true);
     }
 }

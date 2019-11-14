@@ -46,6 +46,7 @@ Route::group(['namespace' => "Business",'middleware' => ['auth']], function () {
     Route::post('/buswithdraw/valPaypwd',  'BuswithdrawController@valPaypwd');
     Route::post('/buswithdraw/resPaypwd',  'BuswithdrawController@resPaypwd');
     Route::post('/buswithdraw/resInfo','BuswithdrawController@resInfo');
+    Route::get('/order/export','OrderController@export');
     Route::resource('/order','OrderController');
     Route::resource('/info','InfoController');
     Route::resource('/billflow','BillflowController');

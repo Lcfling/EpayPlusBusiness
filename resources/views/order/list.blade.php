@@ -24,6 +24,7 @@
     <div class="layui-inline">
         <button class="layui-btn layui-btn-normal" lay-submit lay-filter="formDemo">搜索</button>
         <button class="layui-btn layui-btn-normal" id="res">重置</button>
+        <button class="layui-btn layui-btn-normal" id="export" name="export" lay-submit lay-filter="formDemo" value="export">导出</button>
     </div>
 @endsection
 @section('table')
@@ -44,8 +45,8 @@
         <tr>
             <th class="hidden-xs">商户订单号</th>
             <th class="hidden-xs">商户号</th>
-            <th class="hidden-xs">请求金额</th>
-            <th class="hidden-xs">实付金额</th>
+            <th class="hidden-xs">付款金额</th>
+            <th class="hidden-xs">收款金额</th>
             <th class="hidden-xs">请求时间</th>
             <th class="hidden-xs">平台订单号</th>
             <th class="hidden-xs">完成时间</th>
@@ -59,8 +60,8 @@
             <tr>
                 <td class="hidden-xs">{{$info['out_order_sn']}}</td>
                 <td class="hidden-xs">{{$info['business_code']}}</td>
-                <td>{{$info['payMoney']}}</td>
-                <td class="hidden-xs">{{$info['tradeMoney']}}</td>
+                <td>{{$info['tradeMoney']}}</td>
+                <td class="hidden-xs">{{$info['sk_money']}}</td>
                 <td class="hidden-xs">{{$info['creatime']}}</td>
                 <td class="hidden-xs">{{$info['order_sn']}}</td>
                 <td class="hidden-xs">{{$info['pay_time']}}</td>
