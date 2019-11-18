@@ -21,7 +21,7 @@
                                 <span class="iconfont">&#xe606;</span>
                             </div>
                             <div class="right-text-con">
-                                <p class="name">会员数</p>
+                                <p class="name">本周的订单数</p>
                                 <p><span class="color-org">88</span>数据<span class="iconfont">&#xe628;</span></p>
                             </div>
                         </a>

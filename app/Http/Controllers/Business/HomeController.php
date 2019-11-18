@@ -8,9 +8,11 @@
  */
 namespace App\Http\Controllers\Business;
 use App\Models\Admin;
+use App\Models\Order;
 use Gregwar\Captcha\CaptchaBuilder;
 use Gregwar\Captcha\PhraseBuilder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 //use App\Http\Controllers\Controller;
@@ -42,7 +44,20 @@ class HomeController extends BaseController
      * 欢迎首页
      */
     public function welcome(){
-        return view('admin.welcome',['sysinfo'=>$this->getSysInfo()]);
+        //根据当前的商户来获取本周的订单数
+        $weeksuf = computeWeek(time(),false);
+        $order = new Order();
+        $order->setTable('order_'.$weeksuf);
+        //获取当前认证的用户id
+        $business = Auth::id();
+        //获取订单数量
+        $count = $order->where('business_code','=',$business)->count();
+        //获取支付成功的订单 status = 1
+        $successCount = $order->where('business_code','=',$business)->where('status','=',1)->count();
+        //成功率
+        $num = round($successCount/$count*100,2);
+        $money = $order->where('business_code','=',$business)->where('status','=',1)->sum('sk_money');
+        return view('admin.welcome',['sysinfo'=>$this->getSysInfo(),'count'=>$count,'successCount'=>$successCount,'num'=>$num,'money'=>$money/100]);
     }
     /**
      * 排序

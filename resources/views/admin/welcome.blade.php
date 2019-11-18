@@ -21,8 +21,8 @@
                                 <span class="iconfont">&#xe606;</span>
                             </div>
                             <div class="right-text-con">
-                                <p class="name">会员数</p>
-                                <p><span class="color-org">88</span>数据<span class="iconfont">&#xe628;</span></p>
+                                <p class="name">本周的订单数</p>
+                                <p><span class="color-org">{{$count}}</span>条<span class="iconfont">&#xe628;</span></p>
                             </div>
                         </a>
                     </li>
@@ -32,8 +32,8 @@
                                 <span class="iconfont">&#xe602;</span>
                             </div>
                             <div class="right-text-con">
-                                <p class="name">文章数</p>
-                                <p><span class="color-blue">88</span>数据<span class="iconfont">&#xe628;</span></p>
+                                <p class="name">已完成的订单数</p>
+                                <p><span class="color-blue">{{$successCount}}</span>条数<span class="iconfont">&#xe628;</span></p>
                             </div>
                         </a>
                     </li>
@@ -43,8 +43,19 @@
                                 <span class="iconfont">&#xe605;</span>
                             </div>
                             <div class="right-text-con">
-                                <p class="name">评论数</p>
-                                <p><span class="color-green">88</span>数据<span class="iconfont">&#xe60f;</span></p>
+                                <p class="name">成功率</p>
+                                <p><span class="color-green">{{$num}}</span>%<span class="iconfont">&#xe60f;</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="col-sm-12 col-md-4 col-xs-12">
+                        <a href="javascript:;" class="clearfix">
+                            <div class="icon-bg bg-green f-l">
+                                <span class="iconfont">&#xe65e;</span>
+                            </div>
+                            <div class="right-text-con">
+                                <p class="name">本周总金额</p>
+                                <p><span class="color-green">{{$money}}</span><span style="color: red;">￥</span>{{--<span class="iconfont">&#xe60f;</span>--}}</p>
                             </div>
                         </a>
                     </li>

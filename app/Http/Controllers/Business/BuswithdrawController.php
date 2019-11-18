@@ -25,7 +25,7 @@ class BuswithdrawController extends BaseController
         if(true==$request->has('status')){
             $map['status']=$request->input('status');
         }
-        $data = Buswithdraw::where($map)->paginate(5)->appends($request->all());
+        $data = Buswithdraw::where($map)->orderBy('creatime','desc')->paginate(5)->appends($request->all());
         foreach ($data as $key =>$value){
             $data[$key]['money'] = $data[$key]['money']/100;
             $data[$key]['creatime'] =date("Y-m-d H:i:s",$value["creatime"]);
@@ -43,7 +43,7 @@ class BuswithdrawController extends BaseController
         //获取当前登录用户的银行卡列表
         $business = Auth::id();
         $data = Bank::get()->where('business_code',$business)->where('status',0);
-        $busCount = BusCount::where('business_id',$business)->first();
+        $busCount = BusCount::where('business_code',$business)->first();
         $busCount['balance']=$busCount['balance']/100;
         return view('buswithdraw.edit',['info'=>$info,'id'=>$id,'banklist'=>$data,'balance'=>$busCount]);
     }
@@ -51,6 +51,7 @@ class BuswithdrawController extends BaseController
      * 添加提现申请
      */
     public function store(StoreRequest $request){
+        //提现单号
         $order_sn = time().mt_rand(100000,999999);
         //获取银行卡的id
         $id = $request->input('bank_card');
@@ -63,7 +64,7 @@ class BuswithdrawController extends BaseController
         //获取当前用户信息
         $business = Auth::id();
         //获取当前用户的余额
-        $busCount = BusCount::where('business_id',$business)->first();
+        $busCount = BusCount::where('business_code',$business)->first();
         $userInfo = $business?User::find($business):[];
         //效验支付密码
         if($balance>$busCount['balance']){
@@ -76,13 +77,13 @@ class BuswithdrawController extends BaseController
                 //开启事物
                 DB::beginTransaction();
                 try{
-                    $busCon = BusCount::onWriteConnection()->where('business_id',$business)->first()->lockForUpdate();
+                    $busCon = BusCount::onWriteConnection()->where('business_code',$business)->lockForUpdate()->first();
                     if($busCon['balance']<$request->input('money')){
                         $this->unlock($business);
                         DB::rollBack();
                         return ['msg'=>'您输入的金额大于余额！请重新输入','status'=>0];
                     }else{
-                        $num = BusCount::where('business_id',$business)->decrement('balance',$balance);
+                        $num = BusCount::where('business_code',$business)->decrement('balance',$balance);
                         if($num){
                             $count = DB::table('business_withdraw')->insert(['order_sn'=>$order_sn,'business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'creatime'=>time()]);
                             if($count){
