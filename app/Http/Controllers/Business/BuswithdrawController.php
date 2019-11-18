@@ -52,7 +52,7 @@ class BuswithdrawController extends BaseController
      */
     public function store(StoreRequest $request){
         //提现单号
-        $order_sn = time().mt_rand(100000,999999);
+        $order_sn = date("YmdHis",time()).mt_rand(100000,999999);
         //获取银行卡的id
         $id = $request->input('bank_card');
         //获取输入的支付密码
