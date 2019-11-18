@@ -21,6 +21,9 @@
         <div class="layui-tab-item layui-show">
             <form class="layui-form"  style="width: 90%;padding-top: 20px;" id="info_form">
                 {{ csrf_field() }}
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <legend>允许修改</legend>
+                </fieldset>
                 <div class="layui-form-item">
                     <label class="layui-form-label">昵称：</label>
                     <div class="layui-input-block">
@@ -28,6 +31,14 @@
                         <input type="hidden" id="nickname" value="{{$userinfo['nickname']}}">
                     </div>
                 </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="adminInfo">立即提交</button>
+                    </div>
+                </div>
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <legend>不允许修改</legend>
+                </fieldset>
                 <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
@@ -47,11 +58,6 @@
                     </div>
                 </div>
                 <input name="id" type="hidden" value="{{$userinfo['business_code'] or 0}}">
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="adminInfo">立即提交</button>
-                    </div>
-                </div>
             </form>
         </div>
         <div class="layui-tab-item">

@@ -72,7 +72,7 @@ class OrderController extends Controller
             }
             exportExcel($head,$data,'订单信息','',true);
         }else{
-            $data=$sql->paginate(5)->appends($request->all());
+            $data=$sql->paginate(10)->appends($request->all());
             foreach ($data as $key=>$value){
                 $data[$key]['creatime']=date("Y-m-d H:i:s",$value["creatime"]);
                 if($data[$key]['pay_time']!=0){
