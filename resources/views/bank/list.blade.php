@@ -30,7 +30,8 @@
             <tr>
                 <td class="hidden-xs">{{$info['name']}}</td>
                 <td class="hidden-xs">{{$info['deposit_name']}}</td>
-                <td class="hidden-xs">{{$info['deposit_card']}}</td>
+                <td class="hidden-xs deposit_card">***************************</td>
+                <input type="hidden" name="deposit_card" value="{{$info['deposit_card']}}">
                 <td class="hidden-xs">{{$info['creatime']}}</td>
                 <td class="hidden-xs">
                     @if($info['status']==0)
@@ -66,6 +67,14 @@
             ;
             laydate({istoday: true});
             form.render();
+            $('.deposit_card').hover(function () {
+                var _this = $(this);
+                var card = _this.next().val();
+                _this.html(card);
+            },function () {
+                var _this = $(this);
+                _this.html('***************************');
+            });
             form.on('submit(formDemo)', function(data) {
             });
         });
