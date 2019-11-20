@@ -1,4 +1,4 @@
-@section('title', '提现列表')
+@section('title', '个人信息')
 @section('header')
     <div class="layui-inline">
     <button class="layui-btn layui-btn-small layui-btn-warm freshBtn"><i class="layui-icon">&#x1002;</i></button>
@@ -29,7 +29,8 @@
             <tr>
                 <td class="hidden-xs">{{$list['nickname']}}</td>
                 <td class="hidden-xs">{{$list['account']}}</td>
-                <td>{{$list['accessKey']}}</td>
+                <td class="hidden-xs accessKey">*********************************************</td>
+                <input type="hidden" value="{{$list['accessKey']}}" name="accessKey">
                 <td class="hidden-xs">{{$list['mobile']}}</td>
                 <td class="hidden-xs">{{$list['fee']}}%</td>
             </tr>
@@ -47,6 +48,14 @@
             laydate({istoday: true});
             form.render();
             form.on('submit(formDemo)', function(data) {
+            });
+            $(".accessKey").hover(function () {
+                var _this = $(this);
+                var accessKey = $("input[name='accessKey']").val();
+                _this.html(accessKey);
+            },function () {
+                var _this = $(this);
+                _this.html('*********************************************');
             });
         });
     </script>
