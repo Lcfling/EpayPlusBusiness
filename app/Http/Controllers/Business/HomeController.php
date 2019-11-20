@@ -54,10 +54,19 @@ class HomeController extends BaseController
         $count = $order->where('business_code','=',$business)->count();
         //获取支付成功的订单 status = 1
         $successCount = $order->where('business_code','=',$business)->where('status','=',1)->count();
-        //成功率
-        $num = round($successCount/$count*100,2);
+        if($count==0){
+            $num=0;
+        }else if ($count>0){
+            //成功率
+            $num = round($successCount/$count*100,2);
+        }
         $money = $order->where('business_code','=',$business)->where('status','=',1)->sum('sk_money');
-        return view('admin.welcome',['sysinfo'=>$this->getSysInfo(),'count'=>$count,'successCount'=>$successCount,'num'=>$num,'money'=>$money/100]);
+        if($money==0){
+            $money=0;
+        }else{
+            $money = $money/100;
+        }
+        return view('admin.welcome',['sysinfo'=>$this->getSysInfo(),'count'=>$count,'successCount'=>$successCount,'num'=>$num,'money'=>$money]);
     }
     /**
      * 排序

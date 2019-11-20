@@ -15,9 +15,9 @@ class BillflowController extends BaseController
      */
     public function index(Request $request){
         $id = Auth::id();
-        if(true==$request->has('creattime')){
-            $date = $request->input('creattime');
-            $time = strtotime($request->input('creattime'));
+        if(true==$request->has('creatime')){
+            $date = $request->input('creatime');
+            $time = strtotime($request->input('creatime'));
             $weeksuf = computeWeek($time,false);
         }else{
             $date = "本周";
@@ -26,37 +26,40 @@ class BillflowController extends BaseController
         $bill = new Billflow();
         $bill->setTable('business_billflow_'.$weeksuf);
         $sql = $bill->where('business_code','=',$id);
-        if(true==$request->has('creattime')){
-            $start=strtotime($request->input('creattime'));
+        if(true==$request->has('creatime')){
+            $start=strtotime($request->input('creatime'));
             $end = strtotime('+1day',$start);
-            $sql->whereBetween('creattime',[$start,$end]);
+            $sql->whereBetween('creatime',[$start,$end]);
         }
         if(true==$request->input('export')&&true==$request->has('export')){
             $head = array('订单号','积分','商户号','状态','支付类型','备注','创建时间');
-            $data = $sql->select('order_sn','score','business_code','status','paycode','remark','creattime')->get()->toArray();
-            foreach ($data as $key => $value){
-                $data[$key]['creattime']=date("Y-m_d H:i:s",$value['creattime']);
-                if($data[$key]['status']==1){
-                    $data[$key]['status']="支付";
-                }else if($data[$key]['status']==2){
-                    $data[$key]['status']="利润";
-                }else{
-                    $data[$key]['status']="未知";
+            $data = $sql->select('order_sn','score','business_code','status','paycode','remark','creatime')->get()->toArray();
+            if (!$data){
+                echo "<script>alert('暂无数据，无法导出!');location.href='".$_SERVER["HTTP_REFERER"]."';</script>";
+            }else{
+                foreach ($data as $key => $value){
+                    $data[$key]['creatime']=date("Y-m_d H:i:s",$value['creatime']);
+                    if($data[$key]['status']==1){
+                        $data[$key]['status']="支付";
+                    }else if($data[$key]['status']==2){
+                        $data[$key]['status']="利润";
+                    }else{
+                        $data[$key]['status']="未知";
+                    }
+                    if($data[$key]['paycode']==1){
+                        $data[$key]['paycode']="微信";
+                    }else if($data[$key]['paycode']==2){
+                        $data[$key]['paycode']="支付宝";
+                    }else{
+                        $data[$key]['paycode']="未知";
+                    }
                 }
-                if($data[$key]['paycode']==1){
-                    $data[$key]['paycode']="微信";
-                }else if($data[$key]['paycode']==2){
-                    $data[$key]['paycode']="支付宝";
-                }else{
-                    $data[$key]['paycode']="未知";
-                }
+                exportExcel($head,$data,$date.'账户流水','',true);
             }
-            exportExcel($head,$data,$date.'账户流水','',true);
         }else{
             $data =$sql->paginate(10)->appends($request->all());
-
             foreach ($data as $key =>$value){
-                $data[$key]['creattime'] =date("Y-m-d H:i:s",$value["creattime"]);
+                $data[$key]['creatime'] =date("Y-m-d H:i:s",$value["creatime"]);
             }
             return view('billflow.list',['list'=>$data,'input'=>$request->all()]);
         }
