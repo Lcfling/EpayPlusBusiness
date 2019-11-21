@@ -3,6 +3,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">提现额度：</label>
         <div class="layui-input-block">
+            <div class="layui-form-mid layui-word-aux">每一笔的提现手续费为：￥<b id="fee">{{$fee}}</b>，提现范围是100-50000元</div>
             <input type="number" name="money" required lay-verify="money" id="money" placeholder="请输入提现额度" autocomplete="off" class="layui-input">
             <input type="hidden" value="{{$balance['balance']}}" id="balance">
             <div class="layui-form-mid layui-word-aux">您的可提现余额为：￥<b style="color: red;">{{$balance['balance']}}</b>&nbsp;<span class="layui-breadcrumb"><a href="#" data-key="{{$balance['balance']}}" id="draw">全部提现</a></span></div>
@@ -47,8 +48,15 @@
             });
             form.on('submit(formDemo)', function(data) {
                 var number = $('#money').val();
-                if(number==0||number<0){
-                    layer.msg('余额不足，不能提现！',{shift: 6,icon:5});
+                //获取手续费
+                var fee = $("#fee").html();
+                //获取余额
+                var balance = $('#balance').val();
+                var sum = fee + number;
+                if (number < 100 || number > 50000) {
+                    layer.msg('提现范围100-50000！', {shift: 6, icon: 5});
+                }else if(sum>balance){
+                    layer.msg('余额不足不能提现！', {shift: 6, icon: 5});
                 }else{
                     $.ajax({
                         url:"{{url('/business/buswithdraw')}}",

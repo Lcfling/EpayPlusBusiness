@@ -32,6 +32,7 @@ class BuswithdrawController extends BaseController
             if($data[$key]['endtime']!=''){
                 $data[$key]['endtime'] =date("Y-m-d H:i:s",$value["endtime"]);
             }
+            $data[$key]['feemoney']=$data[$key]['feemoney']/100;
         }
         return view('buswithdraw.list',['list'=>$data,'input'=>$request->all()]);
     }
@@ -45,7 +46,9 @@ class BuswithdrawController extends BaseController
         $data = Bank::get()->where('business_code',$business)->where('status',0);
         $busCount = BusCount::where('business_code',$business)->first();
         $busCount['balance']=$busCount['balance']/100;
-        return view('buswithdraw.edit',['info'=>$info,'id'=>$id,'banklist'=>$data,'balance'=>$busCount]);
+        //获取提现手继续
+        $fee = DB::table('admin_options')->where('key','=','one_time_draw')->value('value');
+        return view('buswithdraw.edit',['info'=>$info,'id'=>$id,'banklist'=>$data,'balance'=>$busCount,'fee'=>$fee]);
     }
     /**
      * 添加提现申请
@@ -57,8 +60,10 @@ class BuswithdrawController extends BaseController
         $id = $request->input('bank_card');
         //获取输入的支付密码
         $pwd = $request->input('paypassword');
+        //获取提现手继续
+        $fee = DB::table('admin_options')->where('key','=','one_time_draw')->value('value');
         //获取用户输入的金额
-        $balance = $request->input('money')*100;
+        $balance = $request->input('money')*100+$fee;
         //获取银行卡的信息
         $bankInfo = $id?Bank::find($id):[];
         //获取当前用户信息
@@ -66,9 +71,10 @@ class BuswithdrawController extends BaseController
         //获取当前用户的余额
         $busCount = BusCount::where('business_code',$business)->first();
         $userInfo = $business?User::find($business):[];
+
         //效验支付密码
         if($balance>$busCount['balance']){
-            return ['msg'=>'您输入的金额大于余额！请重新输入','status'=>0];
+            return ['msg'=>'余额不足，不能提现！','status'=>0];
         }else if(md5(md5(HttpFilter($pwd)))!=$userInfo['paypassword']){
             return ['msg'=>'提现密码不正确！','statuc'=>0];
         }else{
@@ -83,9 +89,9 @@ class BuswithdrawController extends BaseController
                         DB::rollBack();
                         return ['msg'=>'您输入的金额大于余额！请重新输入','status'=>0];
                     }else{
-                        $num = BusCount::where('business_code',$business)->decrement('balance',$balance);
+                        $num = BusCount::where('business_code',$business)->decrement('balance',(int)$balance);
                         if($num){
-                            $count = DB::table('business_withdraw')->insert(['order_sn'=>$order_sn,'business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'creatime'=>time()]);
+                            $count = DB::table('business_withdraw')->insert(['order_sn'=>$order_sn,'business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'creatime'=>time(),'feemoney'=>$fee]);
                             if($count){
                                 DB::commit();
                                 $this->unlock($business);
