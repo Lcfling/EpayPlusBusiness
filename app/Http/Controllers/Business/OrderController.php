@@ -16,9 +16,11 @@ class OrderController extends Controller
     public function index(Request $request){
         $business = Auth::id();
         if(true==$request->has('creatime')){
+            $date = $request->input('creatime');
             $time = strtotime($request->input('creatime'));
             $weeksuf = computeWeek($time,false);
         }else{
+            $date = "本周";
             $weeksuf = computeWeek(time(),false);
         }
         $order = new Order();
@@ -73,7 +75,7 @@ class OrderController extends Controller
                         $data[$key]['sk_status']="自动收款";
                     }
                 }
-                exportExcel($head,$data,'订单信息','',true);
+                exportExcel($head,$data,$date.'订单信息','',true);
             }
         }else{
             $data=$sql->paginate(10)->appends($request->all());

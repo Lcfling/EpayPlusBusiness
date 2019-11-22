@@ -32,8 +32,8 @@ class BillflowController extends BaseController
             $sql->whereBetween('creatime',[$start,$end]);
         }
         if(true==$request->input('export')&&true==$request->has('export')){
-            $head = array('订单号','积分','商户号','状态','支付类型','备注','创建时间');
-            $data = $sql->select('order_sn','score','business_code','status','paycode','remark','creatime')->get()->toArray();
+            $head = array('订单号','提现金额(￥)','实际到账金额(￥)','商户号','	状态','备注','创建时间');
+            $data = $sql->select('order_sn','score','tradeMoney','business_code','status','remark','creatime')->get()->toArray();
             if (!$data){
                 echo "<script>alert('暂无数据，无法导出!');location.href='".$_SERVER["HTTP_REFERER"]."';</script>";
             }else{
@@ -43,16 +43,18 @@ class BillflowController extends BaseController
                         $data[$key]['status']="支付";
                     }else if($data[$key]['status']==2){
                         $data[$key]['status']="利润";
+                    }else if ($data[$key]){
+                        $data[$key]['status']="提现";
                     }else{
                         $data[$key]['status']="未知";
                     }
-                    if($data[$key]['paycode']==1){
+                    /*if($data[$key]['paycode']==1){
                         $data[$key]['paycode']="微信";
                     }else if($data[$key]['paycode']==2){
                         $data[$key]['paycode']="支付宝";
                     }else{
                         $data[$key]['paycode']="未知";
-                    }
+                    }*/
                 }
                 exportExcel($head,$data,$date.'账户流水','',true);
             }
