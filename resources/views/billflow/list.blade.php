@@ -38,7 +38,7 @@
         @foreach($list as $info)
             <tr>
                 <td class="hidden-xs">{{$info['order_sn']}}</td>
-                <td>{{$info['score']}}</td>
+                <td class="hidden-xs">{{$info['score']}}</td>
                 <td class="hidden-xs">{{$info['tradeMoney']}}</td>
                 <td class="hidden-xs">{{$info['business_code']}}</td>
                 <td class="hidden-xs">
