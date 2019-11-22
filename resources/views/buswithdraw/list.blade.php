@@ -37,9 +37,9 @@
             <th class="hidden-xs">姓名</th>
             <th class="hidden-xs">银行卡名称</th>
             <th class="hidden-xs">银行卡号</th>
-            <th class="hidden-xs">提现总金额</th>
-            <th class="hidden-xs">实际到账金额</th>
-            <th class="hidden-xs">提现手续费</th>
+            <th class="hidden-xs">提现总金额(单位：￥)</th>
+            <th class="hidden-xs">实际到账金额(单位：￥)</th>
+            <th class="hidden-xs">提现手续费(单位：￥)</th>
             <th class="hidden-xs">请求时间</th>
             <th class="hidden-xs">结算时间</th>
             <th class="hidden-xs">结算状态</th>
