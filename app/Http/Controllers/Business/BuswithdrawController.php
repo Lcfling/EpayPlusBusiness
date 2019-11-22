@@ -3,11 +3,9 @@
 
 namespace App\Http\Controllers\Business;
 
-
-
-
 use App\Http\Requests\StoreRequest;
 use App\Models\Bank;
+use App\Models\Billflow;
 use App\Models\BusCount;
 use App\Models\Buswithdraw;
 use App\Models\User;
@@ -32,6 +30,7 @@ class BuswithdrawController extends BaseController
             if($data[$key]['endtime']!=''){
                 $data[$key]['endtime'] =date("Y-m-d H:i:s",$value["endtime"]);
             }
+            $data[$key]['tradeMoney']=$data[$key]['tradeMoney']/100;
             $data[$key]['feemoney']=$data[$key]['feemoney']/100;
         }
         return view('buswithdraw.list',['list'=>$data,'input'=>$request->all()]);
@@ -48,7 +47,7 @@ class BuswithdrawController extends BaseController
         $busCount['balance']=$busCount['balance']/100;
         //获取提现手继续
         $fee = DB::table('admin_options')->where('key','=','one_time_draw')->value('value');
-        return view('buswithdraw.edit',['info'=>$info,'id'=>$id,'banklist'=>$data,'balance'=>$busCount,'fee'=>$fee]);
+        return view('buswithdraw.edit',['info'=>$info,'id'=>$id,'banklist'=>$data,'balance'=>$busCount,'fee'=>$fee/100]);
     }
     /**
      * 添加提现申请
@@ -63,7 +62,7 @@ class BuswithdrawController extends BaseController
         //获取提现手继续
         $fee = DB::table('admin_options')->where('key','=','one_time_draw')->value('value');
         //获取用户输入的金额
-        $balance = $request->input('money')*100+$fee;
+        $balance = $request->input('money')*100;
         //获取银行卡的信息
         $bankInfo = $id?Bank::find($id):[];
         //获取当前用户信息
@@ -91,11 +90,22 @@ class BuswithdrawController extends BaseController
                     }else{
                         $num = BusCount::where('business_code',$business)->decrement('balance',(int)$balance);
                         if($num){
-                            $count = DB::table('business_withdraw')->insert(['order_sn'=>$order_sn,'business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'creatime'=>time(),'feemoney'=>$fee]);
+                            $count = DB::table('business_withdraw')->insert(['order_sn'=>$order_sn,'business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'tradeMoney'=>$balance-$fee,'creatime'=>time(),'feemoney'=>$fee]);
                             if($count){
-                                DB::commit();
-                                $this->unlock($business);
-                                return ['msg'=>'申请成功！请您耐心稍等','status'=>1];
+                                //获取当前周
+                                $week = computeWeek(time(),false);
+                                $bill = new Billflow();
+                                $bill->setTable('business_billflow_'.$week);
+                                $res = $bill->insert(['order_sn'=>$order_sn,'score'=>(int)$balance,'tradeMoney'=>(int)$balance-(int)$fee,'business_code'=>$business,'status'=>3,'remark'=>'商户提现扣除','creatime'=>time()]);
+                                if($res){
+                                    DB::commit();
+                                    $this->unlock($business);
+                                    return ['msg'=>'申请成功！请您耐心稍等','status'=>1];
+                                }else{
+                                    DB::rollBack();
+                                    $this->unlock($business);
+                                    return ['msg'=>'申请失败！请重新填写信息','status'=>0];
+                                }
                             }else{
                                 DB::rollBack();
                                 $this->unlock($business);

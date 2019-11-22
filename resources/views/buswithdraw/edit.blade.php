@@ -52,29 +52,29 @@
                 var fee = $("#fee").html();
                 //获取余额
                 var balance = $('#balance').val();
-                var sum = fee + number;
+                var num = number-fee;
                 if (number < 100 || number > 50000) {
                     layer.msg('提现范围100-50000！', {shift: 6, icon: 5});
-                }else if(sum>balance){
-                    layer.msg('余额不足不能提现！', {shift: 6, icon: 5});
                 }else{
-                    $.ajax({
-                        url:"{{url('/business/buswithdraw')}}",
-                        data:$('form').serialize(),
-                        type:'post',
-                        dataType:'json',
-                        success:function(res){
-                            if(res.status == 1){
-                                layer.msg(res.msg,{icon:6});
-                                var index = parent.layer.getFrameIndex(window.name);
-                                setTimeout('parent.layer.close('+index+')',2000);
-                            }else{
-                                layer.msg(res.msg,{shift: 6,icon:5});
+                    layer.confirm("本次提现金额为￥"+number+"，实际到账金额为￥"+num+"，收取您的手续费￥"+fee+"！确定要提现吗？", function(index){
+                        $.ajax({
+                            url:"{{url('/business/buswithdraw')}}",
+                            data:$('form').serialize(),
+                            type:'post',
+                            dataType:'json',
+                            success:function(res){
+                                if(res.status == 1){
+                                    layer.msg(res.msg,{icon:6});
+                                    var index = parent.layer.getFrameIndex(window.name);
+                                    setTimeout('parent.layer.close('+index+')',2000);
+                                }else{
+                                    layer.msg(res.msg,{shift: 6,icon:5});
+                                }
+                            },
+                            error : function(XMLHttpRequest, textStatus, errorThrown) {
+                                layer.msg('网络失败', {time: 1000});
                             }
-                        },
-                        error : function(XMLHttpRequest, textStatus, errorThrown) {
-                            layer.msg('网络失败', {time: 1000});
-                        }
+                        });
                     });
                 }
                 return false;
