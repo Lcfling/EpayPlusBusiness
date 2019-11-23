@@ -47,7 +47,7 @@ class LoginController extends BaseController
         //判断账号是否存在
         $count = User::where('account','=',$request->input('account'))->count();
         if($count==0){
-            return redirect('/agent/login')->withErrors([trans('fzs.login.false_account')]);
+            return redirect('/business/login')->withErrors([trans('fzs.login.false_account')]);
         }
         $user = new User();
         if(!$this->verifyGooglex($request->input('ggkey'),HttpFilter($request->input('account')),$user)){
