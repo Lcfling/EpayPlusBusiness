@@ -72,7 +72,9 @@ class BuswithdrawController extends BaseController
         $userInfo = $business?User::find($business):[];
 
         //效验支付密码
-        if($balance>$busCount['balance']){
+        if($userInfo['paypassword']==null||$userInfo['paypassword']==''){
+            return ["msg"=>'您还没有设置支付密码，请点击右上角进入设置','status'=>0];
+        }else if($balance>$busCount['balance']){
             return ['msg'=>'余额不足，不能提现！','status'=>0];
         }else if(md5(md5(HttpFilter($pwd)))!=$userInfo['paypassword']){
             return ['msg'=>'提现密码不正确！','statuc'=>0];
@@ -214,6 +216,26 @@ class BuswithdrawController extends BaseController
             return ['msg'=>'修改成功！','status'=>1];
         }else{
             return ['msg'=>'修改失败！','status'=>0];
+        }
+    }
+    /**
+     * 设置支付密码
+     */
+    public function setPayPwd(StoreRequest $request){
+        //获取支付密码
+        $paypassword = $request->input('paypassword');
+        //获取当前的认证用户
+        $business = Auth::id();
+        $userInfo = $business?User::find($business):[];
+        if($userInfo['paypassword']!=null||$userInfo['paypassword']!=''){
+            return ['msg'=>'错误！','msg'=>0];
+        }else{
+            $count = User::where('business_code',$business)->update(['paypassword'=>md5(md5(HttpFilter($paypassword)))]);
+            if($count){
+                return ['msg'=>'设置成功！','status'=>1];
+            }else{
+                return ['msg'=>'设置失败！','status'=>0];
+            }
         }
     }
 }

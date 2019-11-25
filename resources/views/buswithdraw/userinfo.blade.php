@@ -102,26 +102,29 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">旧支付密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="oldpaypwd" required lay-verify="oldpaypwd" id="oldpaypwd" placeholder="请输入旧支付密码" autocomplete="off" class="layui-input">
+                        <input type="password" name="oldpaypwd" lay-verify="oldpaypwd" id="oldpaypwd" placeholder="请输入旧支付密码" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">新支付密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="paypwd" required lay-verify="paypwd" placeholder="请输入新支付密码" autocomplete="off" class="layui-input">
+                        <input type="password" name="paypwd" lay-verify="paypwd" placeholder="请输入新支付密码" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">重复密码：</label>
                     <div class="layui-input-block">
-                        <input type="password" name="paypwd_confirmation" required lay-verify="paypwd_confirmation" placeholder="请再次输入密码" autocomplete="off" class="layui-input">
+                        <input type="password" name="paypwd_confirmation" lay-verify="paypwd_confirmation" placeholder="请再次输入密码" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <input name="id" type="hidden" value="{{$userinfo['business_code'] or 0}}">
-
+                <input name="password" type="hidden" value="{{$userinfo['password']}}">
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn layui-btn-normal" lay-submit lay-filter="adminPayPassword">立即提交</button>
+                        @if($userinfo['paypassword']==null || $userinfo['paypassword']=='')
+                            <input class="layui-btn layui-btn-normal" onclick="setPassword()" value="设置支付密码">
+                        @endif
                     </div>
                 </div>
             </form>
@@ -129,6 +132,7 @@
     </div>
 </div>
 <script src="/static/admin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/admin/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 <script>
     layui.use(['form','jquery','element'], function(){
         var form = layui.form(),
@@ -282,6 +286,59 @@
             return false;
         });
     });
+    function setPassword() {
+        layer.open({
+            type:1,
+            title: false,
+            closeBtn:false,
+            area: '400px',
+            shade:0.8,
+            id:'LAY_layuipro',//设定一个id,防止重复弹出
+            btn: ['点击关闭'],
+            btnAlign:'c',
+            moveType:1,//拖拽模式 0或1
+            content:'<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">' +
+                '<div class="layui-form-item"><input type="text" name="paypasswords" id="paypasswords" placeholder="支付密码" class="layui-input"></div>' +
+                '<div class="layui-form-item"><input type="text" name="newpaypwds" id="newpaypwds" placeholder="确认支付密码" class="layui-input"></div>' +
+                '<div class="layui-form-item">' +
+                '<input type="button" class="layui-btn layui-btn-normal" onclick="submit()" value="确认">' +
+                '</div>' +
+                '</div>',
+            success:function (layero) {
+                var btn = layero.find('.layui-layer-btn');
+
+            }
+        });
+    }
+    function submit() {
+        //获取表单信息
+        var pwd = document.getElementById('paypasswords');
+        var newpwd = document.getElementById('newpaypwds');
+        if(pwd.value!==newpwd.value){
+            layer.msg("两次密码输入不同！",{shift: 6,icon:5});
+        }else{
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('#token').val()
+                },
+                url:"{{url('/business/buswithdraw/setPayPwd')}}",
+                data:{
+                    "paypassword":pwd.value
+                },
+                type:"post",
+                dataType:"json",
+                success:function (res) {
+                    if(res.status==1){
+                        layer.msg(res.msg,{icon:6});
+                        var index = parent.layer.getFrameIndex(window.name);
+                        setTimeout('parent.layer.close('+index+')',2000);
+                    }else{
+                        layer.msg(res.msg,{shift: 6,icon:5});
+                    }
+                }
+            });
+        }
+    }
 </script>
 </body>
 </html>
