@@ -51,8 +51,8 @@
             password: [/(.+){6,12}$/, '密码必须6到12位'],
         });
         $('#res').click(function () {
-            /*window.location.href="/business/login";*/
-            layer.open({
+            window.location.href="/business/login";
+            /*layer.open({
                 type:1,
                 title: false,
                 closeBtn:false,
@@ -75,7 +75,7 @@
                     new QRCode(document.getElementById("qrcode"), "otpauth://totp/EPayPlusBusiness:18037297220?\n" +
                         "secret=&issuer=EPayPlusBusiness&algorithm=SHA1&digits=6&period=30");
                 }
-            });
+            });*/
         });
         $("input[name='account']").blur(function () {
             var _this = $(this);
@@ -256,7 +256,7 @@
                             success:function (layero) {
                                 var btn = layero.find('.layui-layer-btn');
                                 btn.find('.layui-layer-btn0').attr({
-                                    href: window.location.host+'/business/login'
+                                    href: '/business/login'
                                     ,target: '_blank'
                                 });
                                 new QRCode(document.getElementById("qrcode"), res.url);
