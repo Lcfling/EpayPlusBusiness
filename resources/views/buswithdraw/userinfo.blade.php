@@ -298,8 +298,8 @@
             btnAlign:'c',
             moveType:1,//拖拽模式 0或1
             content:'<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">' +
-                '<div class="layui-form-item"><input type="text" name="paypasswords" id="paypasswords" placeholder="支付密码" class="layui-input"></div>' +
-                '<div class="layui-form-item"><input type="text" name="newpaypwds" id="newpaypwds" placeholder="确认支付密码" class="layui-input"></div>' +
+                '<div class="layui-form-item"><input type="password" name="paypasswords" id="paypasswords" placeholder="支付密码" class="layui-input" maxlength="6" oninput="value=value.replace(/[^\\d]/g,\'\')"></div>' +
+                '<div class="layui-form-item"><input type="password" name="newpaypwds" id="newpaypwds" placeholder="确认支付密码" class="layui-input" maxlength="6" oninput="value=value.replace(/[^\\d]/g,\'\')"></div>' +
                 '<div class="layui-form-item">' +
                 '<input type="button" class="layui-btn layui-btn-normal" onclick="submit()" value="确认">' +
                 '</div>' +
