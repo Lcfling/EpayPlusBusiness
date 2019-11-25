@@ -51,8 +51,8 @@
             password: [/(.+){6,12}$/, '密码必须6到12位'],
         });
         $('#res').click(function () {
-            window.location.href="/business/login";
-            /*layer.open({
+            /*window.location.href="/business/login";*/
+            layer.open({
                 type:1,
                 title: false,
                 closeBtn:false,
@@ -62,16 +62,20 @@
                 btn: ['绑定完成去登陆','点击关闭'],
                 btnAlign:'c',
                 moveType:1,//拖拽模式 0或1
-                content:'<div id="qrcode" style="padding: 50px; line-height: 32px;"></div>',
+                content:'<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">' +
+                    '<legend>请下载“Google身份验证器”进行扫描绑定</legend>' +
+                    '</fieldset>' +
+                    '<div id="qrcode" style="padding: 50px; line-height: 32px;"></div>',
                 success:function (layero) {
                     var btn = layero.find('.layui-layer-btn');
                     btn.find('.layui-layer-btn0').attr({
                         href: '/business/login'
                         ,target: '_blank'
                     });
-                    new QRCode(document.getElementById("qrcode"), "http://www.runoob.com");
+                    new QRCode(document.getElementById("qrcode"), "otpauth://totp/EPayPlusBusiness:18037297220?\n" +
+                        "secret=&issuer=EPayPlusBusiness&algorithm=SHA1&digits=6&period=30");
                 }
-            });*/
+            });
         });
         $("input[name='account']").blur(function () {
             var _this = $(this);
@@ -245,7 +249,10 @@
                             btn: ['绑定完成去登陆','点击关闭'],
                             btnAlign:'c',
                             moveType:1,//拖拽模式 0或1
-                            content:'<div id="qrcode" style="padding: 50px; line-height: 32px;"></div>',
+                            content:'<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">' +
+                                '<legend>请下载“Google身份验证器”进行扫描绑定</legend>' +
+                                '</fieldset>' +
+                                '<div id="qrcode" style="padding: 50px; line-height: 32px;"></div>',
                             success:function (layero) {
                                 var btn = layero.find('.layui-layer-btn');
                                 btn.find('.layui-layer-btn0').attr({
