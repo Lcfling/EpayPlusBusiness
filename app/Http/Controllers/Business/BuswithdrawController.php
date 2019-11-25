@@ -83,20 +83,20 @@ class BuswithdrawController extends BaseController
                 DB::beginTransaction();
                 try{
                     $busCon = BusCount::onWriteConnection()->where('business_code',$business)->lockForUpdate()->first();
-                    if($busCon['balance']<$request->input('money')){
+                    if((int)$busCon['balance']<(int)$request->input('money')){
                         $this->unlock($business);
                         DB::rollBack();
                         return ['msg'=>'您输入的金额大于余额！请重新输入','status'=>0];
                     }else{
                         $num = BusCount::where('business_code',$business)->decrement('balance',(int)$balance);
                         if($num){
-                            $count = DB::table('business_withdraw')->insert(['order_sn'=>$order_sn,'business_code'=>$business,'name'=>$bankInfo['name'],'deposit_name'=>$bankInfo['deposit_name'],'deposit_card'=>$bankInfo['deposit_card'],'money'=>$balance,'tradeMoney'=>$balance-$fee,'creatime'=>time(),'feemoney'=>$fee]);
+                            $count = DB::table('business_withdraw')->insert(['order_sn'=>HttpFilter($order_sn),'business_code'=>$business,'name'=>HttpFilter($bankInfo['name']),'deposit_name'=>HttpFilter($bankInfo['deposit_name']),'deposit_card'=>HttpFilter($bankInfo['deposit_card']),'money'=>(int)$balance,'tradeMoney'=>(int)$balance-(int)$fee,'creatime'=>time(),'feemoney'=>(int)$fee]);
                             if($count){
                                 //获取当前周
                                 $week = computeWeek(time(),false);
                                 $bill = new Billflow();
                                 $bill->setTable('business_billflow_'.$week);
-                                $res = $bill->insert(['order_sn'=>$order_sn,'score'=>(int)-$balance,'tradeMoney'=>(int)$balance-(int)$fee,'business_code'=>$business,'status'=>3,'remark'=>'商户提现扣除','creatime'=>time()]);
+                                $res = $bill->insert(['order_sn'=>HttpFilter($order_sn),'score'=>-(int)$balance,'tradeMoney'=>(int)$balance-(int)$fee,'business_code'=>$business,'status'=>3,'remark'=>'商户提现扣除','creatime'=>time()]);
                                 if($res){
                                     DB::commit();
                                     $this->unlock($business);
@@ -143,7 +143,7 @@ class BuswithdrawController extends BaseController
         $pwd = $request->input('oldpwd');
         $id = Auth::id();
         $userInfo = $id?User::find($id):[];
-        if(!App::make('hash')->check(HttpFilter($pwd),$userInfo['password'])){
+        if(!App::make('hash')->check(HttpFilter($pwd),HttpFilter($userInfo['password']))){
             return ['msg'=>'旧密码不正确！','status'=>1];
         }
     }

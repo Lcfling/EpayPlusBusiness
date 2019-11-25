@@ -47,7 +47,7 @@ class BankController extends BaseController
         $data['deposit_card']=HttpFilter($data['deposit_card']);
         $data['status']=0;
         $data['creatime']=time();
-        $num = Bank::where('business_code','=',$id)->where('deposit_card','=',$request->input('deposit_card'))->count();
+        $num = Bank::where('business_code','=',$id)->where('deposit_card','=',HttpFilter($request->input('deposit_card')))->count();
         if($num>0){
             return ['msg'=>'银行卡已存在，新增失败！','status'=>0];
         }else{
