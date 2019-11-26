@@ -1,8 +1,9 @@
 @section('title', '提现列表')
 @section('header')
     <div class="layui-inline">
-    <button class="layui-btn layui-btn-small layui-btn-normal addBtn" data-desc="添加提现申请" data-url="{{url('/business/buswithdraw/0/edit')}}"><i class="layui-icon">&#xe654;</i></button>
-    <button class="layui-btn layui-btn-small layui-btn-warm freshBtn"><i class="layui-icon">&#x1002;</i></button>
+    {{--<button class="layui-btn layui-btn-small layui-btn-normal addBtn" data-desc="添加提现申请" ><i class="layui-icon">添加提现申请</i></button>--}}
+        <button class="layui-btn layui-btn-normal addBtn" data-desc="添加提现申请"  data-url="{{url('/business/buswithdraw/0/edit')}}">添加提现申请</button>
+        <button class="layui-btn layui-btn-small layui-btn-warm freshBtn"><i class="layui-icon">&#x1002;</i></button>
     </div>
     <div class="layui-inline">
         <select name="status">

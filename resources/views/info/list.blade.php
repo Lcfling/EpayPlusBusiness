@@ -32,7 +32,7 @@
                 <td class="hidden-xs accessKey">*********************************************</td>
                 <input type="hidden" value="{{$list['accessKey']}}" name="accessKey">
                 <td class="hidden-xs">{{$list['mobile']}}</td>
-                <td class="hidden-xs">{{$list['fee']}}%</td>
+                <td class="hidden-xs">{{$list['fee']*100}}%</td>
             </tr>
         </tbody>
     </table>
