@@ -189,7 +189,7 @@
                     return '新密码不能与旧密码一样';
                 }
                 if(value&&!/^(?!([a-zA-Z]+|\d+)$)[a-zA-Z\d]{6,12}$/.test(value)){
-                    return '旧密码必须6到12位数字加字母';
+                    return '新密码必须6到12位数字加字母';
                 }
             },
             pwd_confirmation: function(value) {
