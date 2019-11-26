@@ -40,6 +40,12 @@
                     <legend>不允许修改</legend>
                 </fieldset>
                 <div class="layui-form-item">
+                    <label class="layui-form-label">商户ID：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="business_code" disabled autocomplete="off" class="layui-input layui-disabled" value="{{$userinfo['business_code']}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">用户名：</label>
                     <div class="layui-input-block">
                         <input type="text" name="username" disabled autocomplete="off" class="layui-input layui-disabled" value="{{$userinfo['account']}}">

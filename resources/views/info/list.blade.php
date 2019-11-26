@@ -15,9 +15,11 @@
             <col class="hidden-xs" width="150">
             <col class="hidden-xs" width="150">
             <col class="hidden-xs" width="150">
+            <col class="hidden-xs" width="150">
         </colgroup>
         <thead>
         <tr>
+            <th class="hidden-xs">商户ID</th>
             <th class="hidden-xs">商户名称</th>
             <th class="hidden-xs">账户</th>
             <th class="hidden-xs">密钥</th>
@@ -27,6 +29,7 @@
         </thead>
         <tbody>
             <tr>
+                <td class="hidden-xs">{{$list['business_code']}}</td>
                 <td class="hidden-xs">{{$list['nickname']}}</td>
                 <td class="hidden-xs">{{$list['account']}}</td>
                 <td class="hidden-xs accessKey">*********************************************</td>

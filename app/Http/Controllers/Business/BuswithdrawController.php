@@ -135,7 +135,7 @@ class BuswithdrawController extends BaseController
     public function userInfo(){
         $id = Auth::id();
         $info = $id?User::find($id):[];
-        return view('buswithdraw.userInfo',['userinfo'=>$info]);
+        return view('buswithdraw.userinfo',['userinfo'=>$info]);
     }
     /**
      * 效验旧密码
