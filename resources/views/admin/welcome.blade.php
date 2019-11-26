@@ -62,7 +62,7 @@
                 </ul>
             </div>
 
-            <!--服务器信息-->
+            {{--<!--服务器信息-->
             <div class="server-panel panel panel-default">
                 <div class="panel-header">服务器信息</div>
                 <div class="panel-body clearfix">
@@ -101,7 +101,7 @@
 
                 </div>
             </div>
-        </div>
+        </div>--}}
     </div>
 </div>
 <script src="/static/admin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
