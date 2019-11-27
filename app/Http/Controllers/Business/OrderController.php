@@ -86,6 +86,11 @@ class OrderController extends Controller
                 }else{
                     $data[$key]['pay_time']="无";
                 }
+                if($data[$key]['callback_time']!=0){
+                    $data[$key]['callback_time']=date("Y-m-d H:i:s",$value["callback_time"]);
+                }else{
+                    $data[$key]['callback_time']="无";
+                }
 
             }
             return view('order.list',['list'=>$data,'input'=>$request->all()]);

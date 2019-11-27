@@ -26,8 +26,8 @@
         <thead>
         <tr>
             <th class="hidden-xs">订单号</th>
-            <th class="hidden-xs">提现金额(￥)</th>
-            <th class="hidden-xs">实际到账金额(￥)</th>
+            <th class="hidden-xs">订单金额(￥)</th>
+            <th class="hidden-xs">到账金额(￥)</th>
             <th class="hidden-xs">商户号</th>
             <th class="hidden-xs">状态</th>
             <th class="hidden-xs">备注</th>
@@ -38,16 +38,16 @@
         @foreach($list as $info)
             <tr>
                 <td class="hidden-xs">{{$info['order_sn']}}</td>
-                <td class="hidden-xs">{{$info['score']/100}}</td>
                 <td class="hidden-xs">{{$info['tradeMoney']/100}}</td>
+                <td class="hidden-xs">{{$info['score']/100}}</td>
                 <td class="hidden-xs">{{$info['business_code']}}</td>
                 <td class="hidden-xs">
                     @if($info['status']==1)
-                        支付
+                        <button type="button" class="layui-btn">支付</button>
                     @elseif($info['status']==2)
-                        利润
+                        <button type="button" class="layui-btn layui-btn-primary">利润</button>
                     @elseif($info['status']==3)
-                        提现
+                        <button type="button" class="layui-btn layui-btn-normal">提现</button>
                     @endif
                 </td>
                 <td class="hidden-xs">{{$info['remark']}}</td>

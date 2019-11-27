@@ -40,19 +40,21 @@
             <col class="hidden-xs" width="150">
             <col class="hidden-xs" width="150">
             <col class="hidden-xs" width="150">
+            <col class="hidden-xs" width="150">
         </colgroup>
         <thead>
         <tr>
             <th class="hidden-xs">商户订单号</th>
             <th class="hidden-xs">商户号</th>
-            <th class="hidden-xs">付款金额</th>
-            <th class="hidden-xs">收款金额</th>
+            <th class="hidden-xs">订单金额</th>
+            <th class="hidden-xs">实付金额</th>
             <th class="hidden-xs">请求时间</th>
             <th class="hidden-xs">平台订单号</th>
             <th class="hidden-xs">完成时间</th>
             <th class="hidden-xs">通知时间</th>
             <th class="hidden-xs">到账金额</th>
             <th class="hidden-xs">账单状态</th>
+            <th class="hidden-xs">回调状态</th>
         </tr>
         </thead>
         <tbody>
@@ -69,13 +71,22 @@
                 <td class="hidden-xs">{{$info['tradeMoney']}}</td>
                 <td class="hidden-xs">
                     @if($info['status']==0)
-                        未支付
+                        <button type="button" class="layui-btn layui-btn-warm">未支付</button>
                     @elseif($info['status']==1)
-                        支付成功
+                        <button type="button" class="layui-btn">支付成功</button>
                     @elseif($info['status']==2)
-                        过期
+                        <button type="button" class="layui-btn layui-btn-danger">过期</button>
                     @else
-                        取消
+                        <button type="button" class="layui-btn layui-btn-disabled">取消</button>
+                    @endif
+                </td>
+                <td class="hidden-xs">
+                    @if($info['callback_status']==0)
+                        <button type="button" class="layui-btn layui-btn-disabled">未知</button>
+                    @elseif($info['callback_status']==1)
+                        <button type="button" class="layui-btn">成功</button>
+                    @elseif($info['callback_status']==2)
+                        <button type="button" class="layui-btn layui-btn-danger">失败</button>
                     @endif
                 </td>
             </tr>

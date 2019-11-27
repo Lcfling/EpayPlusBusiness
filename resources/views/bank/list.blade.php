@@ -30,8 +30,7 @@
             <tr>
                 <td class="hidden-xs">{{$info['name']}}</td>
                 <td class="hidden-xs">{{$info['deposit_name']}}</td>
-                <td class="hidden-xs deposit_card">***************************</td>
-                <input type="hidden" name="deposit_card" value="{{$info['deposit_card']}}">
+                <td class="hidden-xs deposit_card">{{$info['deposit_card']}}</td>
                 <td class="hidden-xs">{{$info['creatime']}}</td>
                 <td class="hidden-xs">
                     @if($info['status']==0)
@@ -42,7 +41,6 @@
                 </td>
                 <td>
                     <div class="layui-inline">
-                        {{--<button class="layui-btn layui-btn-small layui-btn-normal edit-btn" data-id="{{$info['id']}}" data-desc="修改角色" data-url="{{url('/admin/roles/'. $info['id'] .'/edit')}}"><i class="layui-icon">&#xe642;</i></button>--}}
                         <button class="layui-btn layui-btn-small layui-btn-danger del-btn" data-id="{{$info['id']}}" data-url="{{url('/business/bank/'.$info['id'])}}"><i class="layui-icon">&#xe640;</i></button>
                     </div>
                 </td>
@@ -67,14 +65,14 @@
             ;
             laydate({istoday: true});
             form.render();
-            $('.deposit_card').hover(function () {
+            /*$('.deposit_card').hover(function () {
                 var _this = $(this);
                 var card = _this.next().val();
                 _this.html(card);
             },function () {
                 var _this = $(this);
                 _this.html('***************************');
-            });
+            });*/
             form.on('submit(formDemo)', function(data) {
             });
         });

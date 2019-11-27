@@ -21,8 +21,8 @@
                                 <span class="iconfont">&#xe606;</span>
                             </div>
                             <div class="right-text-con">
-                                <p class="name">本周的订单数</p>
-                                <p><span class="color-org">{{$count}}</span>条<span class="iconfont">&#xe628;</span></p>
+                                <p class="name">今日订单数</p>
+                                <p><span class="color-org">{{$orderNum}}</span>条<span class="iconfont">&#xe628;</span></p>
                             </div>
                         </a>
                     </li>
@@ -32,19 +32,8 @@
                                 <span class="iconfont">&#xe602;</span>
                             </div>
                             <div class="right-text-con">
-                                <p class="name">已完成的订单数</p>
-                                <p><span class="color-blue">{{$successCount}}</span>条数<span class="iconfont">&#xe628;</span></p>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="col-sm-12 col-md-4 col-xs-12">
-                        <a href="javascript:;" class="clearfix">
-                            <div class="icon-bg bg-green f-l">
-                                <span class="iconfont">&#xe605;</span>
-                            </div>
-                            <div class="right-text-con">
-                                <p class="name">成功率</p>
-                                <p><span class="color-green">{{$num}}</span>%<span class="iconfont">&#xe60f;</span></p>
+                                <p class="name">今日成功订单</p>
+                                <p><span class="color-blue">{{$orderCount}}</span>条<span class="iconfont">&#xe628;</span></p>
                             </div>
                         </a>
                     </li>
@@ -54,57 +43,148 @@
                                 <span class="iconfont">&#xe65e;</span>
                             </div>
                             <div class="right-text-con">
-                                <p class="name">本周总金额</p>
-                                <p><span class="color-green">{{$money}}</span><span style="color: red;">￥</span>{{--<span class="iconfont">&#xe60f;</span>--}}</p>
+                                <p class="name">今日未付订单数</p>
+                                <p><span class="color-green">{{$orderNoPay}}</span>条<span class="iconfont">&#xe628;</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="col-sm-12 col-md-4 col-xs-12">
+                        <a href="javascript:;" class="clearfix">
+                            <div class="icon-bg bg-green f-l">
+                                <span class="iconfont">&#xe65e;</span>
+                            </div>
+                            <div class="right-text-con">
+                                <p class="name">今日成交金额</p>
+                                <p><span class="color-green">{{$orderMoney}}</span><span style="color: red;">￥</span>{{--<span class="iconfont">&#xe60f;</span>--}}</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="col-sm-12 col-md-4 col-xs-12">
+                        <a href="javascript:;" class="clearfix">
+                            <div class="icon-bg bg-green f-l">
+                                <span class="iconfont">&#xe65e;</span>
+                            </div>
+                            <div class="right-text-con">
+                                <p class="name">账户可提现余额</p>
+                                <p><span class="color-green">{{$balance}}</span><span style="color: red;">￥</span>{{--<span class="iconfont">&#xe60f;</span>--}}</p>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li class="col-sm-12 col-md-4 col-xs-12">
+                        <a href="javascript:;" class="clearfix">
+                            <div class="icon-bg bg-green f-l">
+                                <span class="iconfont">&#xe65e;</span>
+                            </div>
+                            <div class="right-text-con">
+                                <p class="name">累计成交金额</p>
+                                <p><span class="color-green">{{$score}}</span><span style="color: red;">￥</span>{{--<span class="iconfont">&#xe60f;</span>--}}</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="col-sm-12 col-md-4 col-xs-12">
+                        <a href="javascript:;" class="clearfix">
+                            <div class="icon-bg bg-green f-l">
+                                <span class="iconfont">&#xe65e;</span>
+                            </div>
+                            <div class="right-text-con">
+                                <p class="name">累计提现成功</p>
+                                <p><span class="color-green">{{$drawMoney}}</span><span style="color: red;">￥</span>{{--<span class="iconfont">&#xe60f;</span>--}}</p>
                             </div>
                         </a>
                     </li>
                 </ul>
             </div>
-
-            {{--<!--服务器信息-->
             <div class="server-panel panel panel-default">
-                <div class="panel-header">服务器信息</div>
+                <div class="panel-header">最近七天订单数据</div>
+                <div style="padding-left: 15px">
+                    <h3 class="font-bold no-margins" style="padding-bottom: 10px;">全部/成功</h3>
+                    <table style="color:#545454">
+                        <tbody>
+                        <tr>
+                            <td class="legendColorBox">
+                                <div style="border:1px solid #000000;padding:1px">
+                                    <div style="width:4px;height:0;border:5px solid #DCDCDC;overflow:hidden"></div>
+                                </div>
+                            </td>
+                            <td class="legendLabel">全部订单</td>
+                        </tr>
+                        <tr>
+                            <td class="legendColorBox">
+                                <div style="border:1px solid #000000;padding:1px">
+                                    <div style="width:4px;height:0;border:5px solid #1E90FF;overflow:hidden"></div>
+                                </div>
+                            </td>
+                            <td class="legendLabel">成功订单</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="panel-body clearfix">
-                    <div class="col-md-2">
-                        <p class="title">服务器环境</p>
-                        <span class="info">{{$sysinfo['web_server']}}</span>
-                    </div>
-                    <div class="col-md-2">
-                        <p class="title">服务器IP地址</p>
-                        <span class="info">{{$sysinfo['ip']}}</span>
-                    </div>
-                    <div class="col-md-2">
-                        <p class="title">服务器域名</p>
-                        <span class="info">{{$sysinfo['domain']}}</span>
-                    </div>
-                    <div class="col-md-2">
-                        <p class="title"> PHP版本</p>
-                        <span class="info">{{$sysinfo['phpv']}}</span>
-                    </div>
-                    <div class="col-md-2">
-                        <p class="title">数据库信息</p>
-                        <span class="info">{{$sysinfo['mysql_version']}}</span>
-                    </div>
-                    <div class="col-md-2">
-                        <p class="title">服务器当前时间</p>
-                        <span class="info">{{$sysinfo['time']}}</span>
+                    <div>
+                        <canvas id="lineChart" height="100"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="welcome-edge col-lg-3">
-            <!--联系-->
-            <div class="panel panel-default contact-panel">
-                <div class="panel-header">@@@@@</div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-        </div>--}}
     </div>
 </div>
 <script src="/static/admin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
 <script src="/static/admin/lib/echarts/echarts.js"></script>
+<script src="/static/admin/js/jquery.min.js"></script>
+<script src="/static/admin/js/Chart.min.js"></script>
+<script>
+    //y1金额y2人数
+    $(document).ready(function() {
+        var lineData = {
+            labels: {!!$data['x']!!},
+            datasets: [
+                {
+                    label: "y1",
+                    fillColor: "rgba(220,220,220,0.5)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: {!!$data['y1']!!},
+                },
+                {
+                    label: "y2",
+                    fillColor: "rgba(30,144,255,0.5)",
+                    strokeColor: "rgba(30,144,255,0.7)",
+                    pointColor: "rgba(30,144,255,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(30,144,255,1)",
+                    data: {!!$data['y2']!!},
+                }
+            ],
+
+
+        };
+
+        var lineOptions = {
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+            scaleGridLineWidth: 1,
+            bezierCurve: true,
+            bezierCurveTension: 0.4,
+            pointDot: true,
+            pointDotRadius: 4,
+            pointDotStrokeWidth: 1,
+            pointHitDetectionRadius: 20,
+            datasetStroke: true,
+            datasetStrokeWidth: 2,
+            datasetFill: true,
+            responsive: true,
+
+        };
+
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+
+    });
+</script>
 </body>
 </html>
