@@ -320,7 +320,13 @@
         //获取表单信息
         var pwd = document.getElementById('paypasswords');
         var newpwd = document.getElementById('newpaypwds');
-        if(pwd.value!==newpwd.value){
+        if(pwd.value == null || pwd.value==''){
+            layer.msg("密码不能为空！",{shift: 6,icon:5});
+        }else if(newpwd.value==null || newpwd.value==''){
+            layer.msg("确认密码不能为空！",{shift: 6,icon:5});
+        }else if(pwd.value.length>6 || pwd.value.length<6){
+            layer.msg("请输入6位支付密码！",{shift: 6,icon:5});
+        }else if(pwd.value!==newpwd.value){
             layer.msg("两次密码输入不同！",{shift: 6,icon:5});
         }else{
             $.ajax({
