@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Business;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRequest;
+use App\Models\Billflow;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +50,16 @@ class OrderController extends Controller
                 echo "<script>alert('暂无数据，无法导出!');location.href='".$_SERVER["HTTP_REFERER"]."';</script>";
             }else{
                 foreach ($data as $key=>$value){
+                    if($data[$key]['tradeMoney']==0){
+                        $data[$key]['tradeMoney']=0;
+                    }else{
+                        $data[$key]['tradeMoney']=$data[$key]['tradeMoney']/100;
+                    }
+                    if($data[$key]['sk_money']==0){
+                        $data[$key]['sk_money']=0;
+                    }else{
+                        $data[$key]['sk_money']=$data[$key]['sk_money']/100;
+                    }
                     $data[$key]['creatime']=date("Y-m-d H:i:s",$value["creatime"]);
                     $data[$key]['pay_time']=date("Y-m-d H:i:s",$value["pay_time"]);
                     if($data[$key]['payType']==0){
@@ -79,7 +90,23 @@ class OrderController extends Controller
             }
         }else{
             $data=$sql->paginate(10)->appends($request->all());
-            foreach ($data as $key=>$value){
+            foreach ($data as $key=>&$value){
+                if($data[$key]['tradeMoney']==0){
+                    $data[$key]['tradeMoney']=0;
+                }else{
+                    $data[$key]['tradeMoney']=$data[$key]['tradeMoney']/100;
+                }
+                if($data[$key]['sk_money']==0){
+                    $data[$key]['sk_money']=0;
+                }else{
+                    $data[$key]['sk_money']=$data[$key]['sk_money']/100;
+                }
+                $data[$key]['score']=$this->queryBill($data[$key]['order_sn']);
+                if($data[$key]['score']==0){
+                    $data[$key]['score']=0;
+                }else{
+                    $data[$key]['score']=$data[$key]['score']/100;
+                }
                 $data[$key]['creatime']=date("Y-m-d H:i:s",$value["creatime"]);
                 if($data[$key]['pay_time']!=0){
                     $data[$key]['pay_time']=date("Y-m-d H:i:s",$value["pay_time"]);
@@ -95,6 +122,25 @@ class OrderController extends Controller
             }
             return view('order.list',['list'=>$data,'input'=>$request->all()]);
         }
+    }
+
+    /**
+     * @param $order_sn 订单号
+     * @return $billflow 扣除手续费后
+     */
+    public function queryBill($order_sn){
+        $bill =$this->getcounttable($order_sn);
+        $business_code = Auth::id();
+        $billflow = $bill->where('order_sn','=',$order_sn)->where('business_code','=',$business_code)->where('status','=',1)->value('score');
+        return $billflow;
+    }
+
+    public function getcounttable($order_sn){
+        $nyr = substr($order_sn,0,8);
+        $weeksuf = computeWeek($nyr);
+        $bill =new Billflow();
+        $bill->setTable('business_billflow_'.$weeksuf);
+        return $bill;
     }
 
     public function export(StoreRequest $request){

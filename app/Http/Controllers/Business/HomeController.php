@@ -88,7 +88,11 @@ class HomeController extends BaseController
         }
         //获取累计提现成功
         $drawCount = Buswithdraw::where('business_code','=',$busines_code)->where('status','=',1)->sum('money');
-
+        if($drawCount==0){
+            $drawCount=0;
+        }else{
+            $drawCount=$drawCount/100;
+        }
         //<!-- 统计图 -->
         //x轴近七天
         $week=$this->get_weeks(time(),"m-d");

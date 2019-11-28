@@ -68,7 +68,7 @@
                 <td class="hidden-xs">{{$info['order_sn']}}</td>
                 <td class="hidden-xs">{{$info['pay_time']}}</td>
                 <td class="hidden-xs">{{$info['callback_time']}}</td>
-                <td class="hidden-xs">{{$info['tradeMoney']}}</td>
+                <td class="hidden-xs">{{$info['score']}}</td>
                 <td class="hidden-xs">
                     @if($info['status']==0)
                         <button type="button" class="layui-btn layui-btn-warm">未支付</button>
