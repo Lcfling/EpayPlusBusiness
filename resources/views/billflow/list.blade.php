@@ -55,10 +55,10 @@
             </tr>
         @endforeach
         </tbody>
-        <div class="page-wrap">
-            {{$list->render()}}
-        </div>
     </table>
+    <div class="page-wrap">
+        {{$list->render()}}
+    </div>
 @endsection
 @section('js')
     <script>
