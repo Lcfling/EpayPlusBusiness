@@ -98,7 +98,7 @@ class BuswithdrawController extends BaseController
                                 $week = computeWeek(time(),false);
                                 $bill = new Billflow();
                                 $bill->setTable('business_billflow_'.$week);
-                                $res = $bill->insert(['order_sn'=>HttpFilter($order_sn),'score'=>-(int)$balance-(int)$fee,'tradeMoney'=>(int)$balance,'business_code'=>$business,'status'=>3,'remark'=>'商户提现扣除','creatime'=>time()]);
+                                $res = $bill->insert(['order_sn'=>HttpFilter($order_sn),'score'=>+(int)$balance-(int)$fee,'tradeMoney'=>-(int)$balance,'business_code'=>$business,'status'=>3,'remark'=>'商户提现扣除','creatime'=>time()]);
                                 if($res){
                                     DB::commit();
                                     $this->unlock($business);
