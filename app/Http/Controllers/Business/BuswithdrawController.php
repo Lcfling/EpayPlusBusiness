@@ -74,7 +74,7 @@ class BuswithdrawController extends BaseController
         //效验支付密码
         if($userInfo['paypassword']==null||$userInfo['paypassword']==''){
             return ["msg"=>'您还没有设置支付密码，请点击右上角进入设置','status'=>0];
-        }else if($balance>$busCount['balance']){
+        }else if($balance>$busCount['bal ance']){
             return ['msg'=>'余额不足，不能提现！','status'=>0];
         }else if(md5(md5(HttpFilter($pwd)))!=$userInfo['paypassword']){
             return ['msg'=>'提现密码不正确！','statuc'=>0];

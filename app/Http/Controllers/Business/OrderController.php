@@ -89,7 +89,7 @@ class OrderController extends Controller
                 exportExcel($head,$data,$date.'订单信息','',true);
             }
         }else{
-            $data=$sql->paginate(10)->appends($request->all());
+            $data=$sql->orderBy('creatime','desc')->paginate(10)->appends($request->all());
             foreach ($data as $key=>&$value){
                 if($data[$key]['tradeMoney']==0){
                     $data[$key]['tradeMoney']=0;
