@@ -1527,13 +1527,16 @@
   margin: 10px 0;
   font-size: 0;
 }
+.page-wrap .pagination li{
+  width: 50px;
+}
 .pagination li {
   position: relative;
   display: inline-block;
   *display: inline;
   *zoom: 1;
   border: 1px solid #e2e2e2;
-  width: 28px;
+  width: 40px;
   height: 28px;
   line-height: 28px;
   margin: 0 -1px 5px 0;

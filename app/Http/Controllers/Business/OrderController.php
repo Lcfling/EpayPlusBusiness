@@ -138,6 +138,7 @@ class OrderController extends Controller
     public function getcounttable($order_sn){
         $nyr = substr($order_sn,0,8);
         $weeksuf = computeWeek($nyr);
+        //dump($weeksuf);
         $bill =new Billflow();
         $bill->setTable('business_billflow_'.$weeksuf);
         return $bill;
