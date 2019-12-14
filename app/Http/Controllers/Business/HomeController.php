@@ -65,6 +65,7 @@ class HomeController extends BaseController
 
         //获取今日总收入
         $orderMoney = $sql->where('status','=',1)->whereBetween('creatime',[$time,$end])->sum('tradeMoney');
+
         if($orderMoney==0){
             $orderMoney=0;
         }else{
